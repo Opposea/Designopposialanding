@@ -2,14 +2,14 @@ import React from 'react';
 
 export function OpposiaLogoCompact() {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-3 lg:gap-4">
       <svg
-        width="120"
-        height="120"
+        width="80"
+        height="80"
         viewBox="0 0 400 400"
+        className="lg:w-[120px] lg:h-[120px]"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="drop-shadow-lg"
       >
         <defs>
           {/* Blue gradient for heart - lighter at top, darker at bottom */}
@@ -95,7 +95,7 @@ export function OpposiaLogoCompact() {
       </svg>
 
       <div>
-        <h1 className="text-5xl tracking-widest uppercase text-white drop-shadow-[0_0_20px_rgba(59,130,246,0.8)]" style={{ textShadow: '0 0 30px rgba(59, 130, 246, 0.8), 0 0 60px rgba(59, 130, 246, 0.5)' }}>
+        <h1 className="text-3xl lg:text-5xl tracking-widest uppercase text-white drop-shadow-[0_0_20px_rgba(59,130,246,0.8)]" style={{ textShadow: '0 0 30px rgba(59, 130, 246, 0.8), 0 0 60px rgba(59, 130, 246, 0.5)' }}>
           Opposia
         </h1>
       </div>
