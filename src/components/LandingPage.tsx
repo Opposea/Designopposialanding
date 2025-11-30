@@ -36,9 +36,11 @@ export function LandingPage() {
             </div>
             
             <div className="space-y-2 lg:space-y-3">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 shadow-md border-2 border-blue-300">
-                <Sparkles className="w-4 h-4 text-blue-600" />
-                <span className="text-blue-900 tracking-wide">Coming Soon</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 shadow-md border-2 border-blue-300 animate-pulse hover:animate-none hover:scale-110 transition-transform cursor-default">
+                <Sparkles className="w-4 h-4 text-blue-600 animate-spin" style={{ animationDuration: '3s' }} />
+                <span className="text-blue-900 tracking-wide bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent animate-gradient" style={{ backgroundSize: '200% auto', animation: 'gradient 3s linear infinite' }}>
+                  Coming Soon
+                </span>
               </div>
               
               <h1 className="text-white leading-tight">
