@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { OpposiaLogoCompact } from './OpposiaLogoCompact';
-import { Mail, CheckCircle, Sparkles } from 'lucide-react';
+import { Mail, CheckCircle, Sparkles, Heart, Zap } from 'lucide-react';
+import { motion } from 'motion/react';
 
 export function LandingPage() {
   const [email, setEmail] = useState('');
@@ -18,24 +19,103 @@ export function LandingPage() {
     }
   };
 
+  // Floating hearts animation
+  const floatingHearts = Array.from({ length: 8 }).map((_, i) => ({
+    id: i,
+    delay: i * 0.5,
+    duration: 8 + Math.random() * 4,
+    x: Math.random() * 100,
+    scale: 0.5 + Math.random() * 0.5,
+  }));
+
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative overflow-hidden flex items-center justify-center">
+    <div className="h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-800 relative overflow-hidden flex items-center justify-center">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-sky-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-blue-400 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-30"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            x: [0, 50, 0],
+            y: [0, -30, 0]
+          }}
+          transition={{ 
+            duration: 8, 
+            repeat: Infinity,
+            ease: "easeInOut" 
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500 rounded-full mix-blend-screen filter blur-3xl opacity-30"
+          animate={{ 
+            scale: [1, 1.3, 1],
+            x: [0, -40, 0],
+            y: [0, 40, 0]
+          }}
+          transition={{ 
+            duration: 10, 
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1 
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-400 rounded-full mix-blend-screen filter blur-3xl opacity-25"
+          animate={{ 
+            scale: [1, 1.4, 1],
+            rotate: [0, 180, 360]
+          }}
+          transition={{ 
+            duration: 15, 
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        
+        {/* Floating hearts */}
+        {floatingHearts.map((heart) => (
+          <motion.div
+            key={heart.id}
+            className="absolute text-pink-400/20"
+            style={{ left: `${heart.x}%` }}
+            initial={{ bottom: '-10%', opacity: 0 }}
+            animate={{ 
+              bottom: '110%',
+              opacity: [0, 0.6, 0],
+              x: [0, 30, -20, 0],
+              rotate: [0, 360]
+            }}
+            transition={{ 
+              duration: heart.duration,
+              repeat: Infinity,
+              delay: heart.delay,
+              ease: "easeInOut"
+            }}
+          >
+            <Heart size={24 * heart.scale} fill="currentColor" />
+          </motion.div>
+        ))}
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8 lg:py-0">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left side - Logo and messaging */}
-          <div className="text-center lg:text-left space-y-4 lg:space-y-6">
+          <motion.div 
+            className="text-center lg:text-left space-y-4 lg:space-y-6"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
             <div className="flex justify-center lg:justify-start">
               <OpposiaLogoCompact />
             </div>
             
-            <div className="space-y-2 lg:space-y-3">
+            <motion.div 
+              className="space-y-2 lg:space-y-3"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 shadow-md border-2 border-blue-300 animate-pulse hover:animate-none hover:scale-110 transition-transform cursor-default">
                 <Sparkles className="w-4 h-4 text-blue-600 animate-spin" style={{ animationDuration: '3s' }} />
                 <span className="text-blue-900 tracking-wide bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent animate-gradient" style={{ backgroundSize: '200% auto', animation: 'gradient 3s linear infinite' }}>
@@ -50,32 +130,43 @@ export function LandingPage() {
               <p className="text-gray-200 max-w-lg mx-auto lg:mx-0">
                 Our unique matching algorithm connects you with the person who completes you. The person you never knew you needed.
               </p>
-            </div>
-
-            {/* Featured slogan */}
-            <div className="bg-gradient-to-r from-blue-500/20 to-sky-500/20 backdrop-blur-sm rounded-2xl p-4 lg:p-6 border-2 border-blue-400/50 shadow-xl">
-              <p className="text-white text-center italic">
-                🍳 Hate cooking? They'll love it. Find who completes you.
-              </p>
-            </div>
-
-            {/* Catchy slogans - compact grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="bg-white/90 backdrop-blur rounded-xl p-4 shadow-md border border-blue-200 hover:scale-105 transition-transform">
-                <p className="text-blue-900 text-center sm:text-left">✨ Ditch the Swipe</p>
-              </div>
-              <div className="bg-white/90 backdrop-blur rounded-xl p-4 shadow-md border border-blue-200 hover:scale-105 transition-transform">
-                <p className="text-blue-900 text-center sm:text-left">💫 We do the match, you find the spark</p>
-              </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Right side - Sign up form */}
-          <div className="flex items-center justify-center">
-            <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 lg:p-8 border-2 border-blue-200 relative">
+          <motion.div 
+            className="flex items-center justify-center"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 lg:p-8 border-2 border-blue-200 relative hover:border-pink-300 transition-all duration-300 hover:shadow-[0_0_40px_rgba(236,72,153,0.3)]">
               {/* Decorative elements */}
-              <div className="absolute -top-3 -right-3 w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full opacity-20 blur-2xl"></div>
-              <div className="absolute -bottom-3 -left-3 w-24 h-24 bg-gradient-to-br from-sky-400 to-blue-500 rounded-full opacity-20 blur-2xl"></div>
+              <motion.div 
+                className="absolute -top-3 -right-3 w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full opacity-20 blur-2xl"
+                animate={{ 
+                  scale: [1, 1.2, 1],
+                  opacity: [0.2, 0.4, 0.2]
+                }}
+                transition={{ 
+                  duration: 3, 
+                  repeat: Infinity,
+                  ease: "easeInOut" 
+                }}
+              />
+              <motion.div 
+                className="absolute -bottom-3 -left-3 w-24 h-24 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full opacity-20 blur-2xl"
+                animate={{ 
+                  scale: [1, 1.3, 1],
+                  opacity: [0.2, 0.5, 0.2]
+                }}
+                transition={{ 
+                  duration: 4, 
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 0.5
+                }}
+              />
               
               <div className="relative z-10">
                 <div className="text-center mb-4 lg:mb-6">
@@ -89,7 +180,11 @@ export function LandingPage() {
 
                 {!submitted ? (
                   <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="relative">
+                    <motion.div 
+                      className="relative"
+                      whileFocus={{ scale: 1.02 }}
+                      transition={{ duration: 0.2 }}
+                    >
                       <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
                         type="email"
@@ -97,23 +192,51 @@ export function LandingPage() {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter your email"
                         required
-                        className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
+                        className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors focus:ring-4 focus:ring-blue-200/50"
                       />
-                    </div>
-                    <button
+                    </motion.div>
+                    <motion.button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white py-4 rounded-xl hover:from-blue-600 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                      className="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white py-4 rounded-xl shadow-lg relative overflow-hidden group"
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      Get Early Access
-                    </button>
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500"
+                        initial={{ x: "-100%" }}
+                        whileHover={{ x: "100%" }}
+                        transition={{ duration: 0.6, ease: "easeInOut" }}
+                      />
+                      <span className="relative z-10 flex items-center justify-center gap-2">
+                        <Zap className="w-5 h-5" />
+                        Get Early Access
+                      </span>
+                    </motion.button>
                   </form>
                 ) : (
-                  <div className="text-center py-8">
-                    <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4 animate-bounce" />
-                    <p className="text-green-600">
+                  <motion.div 
+                    className="text-center py-8"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, type: "spring" }}
+                  >
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1, rotate: 360 }}
+                      transition={{ duration: 0.6, type: "spring", stiffness: 200 }}
+                    >
+                      <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                    </motion.div>
+                    <motion.p 
+                      className="text-green-600"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
                       You're on the list! We'll be in touch soon.
-                    </p>
-                  </div>
+                    </motion.p>
+                  </motion.div>
                 )}
 
                 <p className="text-center text-gray-400 mt-4">
@@ -121,7 +244,7 @@ export function LandingPage() {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
