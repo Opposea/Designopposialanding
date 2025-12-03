@@ -2,20 +2,51 @@ import React, { useState } from 'react';
 import { OpposiaLogoCompact } from './OpposiaLogoCompact';
 import { Mail, CheckCircle, Sparkles, Heart, Zap } from 'lucide-react';
 import { motion } from 'motion/react';
+import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 export function LandingPage() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
-      console.log('Email submitted:', email);
+    if (!email) return;
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-cbc95482/waitlist`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${publicAnonKey}`,
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to join waitlist');
+      }
+
+      console.log('Successfully joined waitlist:', email);
       setSubmitted(true);
       setTimeout(() => {
         setEmail('');
         setSubmitted(false);
       }, 3000);
+    } catch (err) {
+      console.error('Error submitting email:', err);
+      setError(err instanceof Error ? err.message : 'Failed to join waitlist. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -237,6 +268,17 @@ export function LandingPage() {
                       You're on the list! We'll be in touch soon.
                     </motion.p>
                   </motion.div>
+                )}
+
+                {error && (
+                  <motion.p 
+                    className="text-red-500 text-center mt-2"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    {error}
+                  </motion.p>
                 )}
 
                 <p className="text-center text-gray-400 mt-4">
