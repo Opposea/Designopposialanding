@@ -3,12 +3,15 @@ import { OpposiaLogoCompact } from './OpposiaLogoCompact';
 import { Mail, CheckCircle, Sparkles, Heart, Zap } from 'lucide-react';
 import { motion } from 'motion/react';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { CookiePreferences } from './CookiePreferences';
+import type { CookieConsent } from './CookieBanner';
 
 export function LandingPage() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showCookiePreferences, setShowCookiePreferences] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +51,12 @@ export function LandingPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSaveCookiePreferences = (preferences: CookieConsent) => {
+    localStorage.setItem('cookieConsent', JSON.stringify(preferences));
+    setShowCookiePreferences(false);
+    console.log('Cookie preferences saved:', preferences);
   };
 
   // Floating hearts animation
@@ -293,9 +302,36 @@ export function LandingPage() {
       {/* Footer at bottom */}
       <div className="absolute bottom-2 lg:bottom-4 left-0 right-0 text-center px-4">
         <p className="text-gray-400">
-          © 2025 Opposia • Where opposites attract
+          © 2025 Opposia • Where opposites attract •{' '}
+          <a 
+            href="#privacy-policy" 
+            className="text-blue-300 hover:text-blue-200 underline transition-colors"
+          >
+            Privacy Policy
+          </a>
+          {' '}•{' '}
+          <a 
+            href="#cookie-policy" 
+            className="text-blue-300 hover:text-blue-200 underline transition-colors"
+          >
+            Cookie Policy
+          </a>
+          {' '}•{' '}
+          <button
+            onClick={() => setShowCookiePreferences(true)}
+            className="text-blue-300 hover:text-blue-200 underline transition-colors"
+          >
+            Cookie Settings
+          </button>
         </p>
       </div>
+
+      {showCookiePreferences && (
+        <CookiePreferences
+          onClose={() => setShowCookiePreferences(false)}
+          onSave={handleSaveCookiePreferences}
+        />
+      )}
     </div>
   );
 }
