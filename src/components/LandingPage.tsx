@@ -150,6 +150,10 @@ export function LandingPage() {
               <OpposiaLogoCompact />
             </div>
             
+            <h2 className="text-white text-center lg:text-left leading-tight px-4 lg:px-0">
+              Sign up for a limited free early access space
+            </h2>
+            
             <motion.div 
               className="space-y-2 lg:space-y-3"
               initial={{ opacity: 0, y: 20 }}
